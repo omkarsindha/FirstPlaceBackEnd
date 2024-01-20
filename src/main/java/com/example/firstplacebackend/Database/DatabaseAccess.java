@@ -19,11 +19,9 @@ public class DatabaseAccess {
     protected NamedParameterJdbcTemplate jdbc;
 
     public Boolean findUserForLogin(User user) {
-        user.setUsername("User1");
-        user.setPassword("Pass1");
         MapSqlParameterSource np = new MapSqlParameterSource();
-        String query = "SELECT * FROM users where name = :name and password = :password";
-        np.addValue("name", user.getUsername());
+        String query = "SELECT * FROM users where username = :username and password = :password";
+        np.addValue("username", user.getUsername());
         np.addValue("password", user.getPassword());
         int count = jdbc.query(query, np,new BeanPropertyRowMapper<User>(User.class)).size();
         return count>0;
@@ -65,15 +63,43 @@ public class DatabaseAccess {
 
     public String editUser(Long id, User user) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
-        String query = "UPDATE users SET username=:name, password=:password, pfp=:pfp,  where id=:id";
+        String query = "UPDATE users SET " +
+                "username=:username, " +
+                "password=:password, " +
+                "pfp=:pfp, " +
+                "bio=:bio, " +
+                "firstName=:firstName, " +
+                "lastName=:lastName, " +
+                "gender=:gender, " +
+                "age=:age, " +
+                "location=:location, " +
+                "ethnicity=:ethnicity, " +
+                "religion=:religion, " +
+                "interests=:interests, " +
+                "hobbies=:hobbies, " +
+                "drinking=:drinking " +
+                "WHERE id=:id";
+
         namedParameters.addValue("id", id);
         namedParameters.addValue("username", user.getUsername());
         namedParameters.addValue("password", user.getPassword());
         namedParameters.addValue("pfp", user.getPfp());
+        namedParameters.addValue("bio", user.getBio());
+        namedParameters.addValue("firstName", user.getFirstName());
+        namedParameters.addValue("lastName", user.getLastName());
+        namedParameters.addValue("gender", user.getGender());
+        namedParameters.addValue("age", user.getAge());
+        namedParameters.addValue("location", user.getLocation());
+        namedParameters.addValue("ethnicity", user.getEthnicity());
+        namedParameters.addValue("religion", user.getReligion());
+        namedParameters.addValue("interests", user.getInterests());
+        namedParameters.addValue("hobbies", user.getHobbies());
+        namedParameters.addValue("drinking", user.getDrinking());
 
         jdbc.update(query, namedParameters);
         return "user info updated";
     }
+
 
     public void deleteUserAccount(Long id) {
             MapSqlParameterSource namedParameters = new MapSqlParameterSource();
@@ -81,8 +107,6 @@ public class DatabaseAccess {
             String query = "DELETE FROM users where id = :id";
             jdbc.update(query, namedParameters);
     }
-
-
 //    public void insertUser() {
 //        try {
 //            String imagePath = "G:\\FirstPlaceBackEnd\\src\\main\\resources\\hi.png";

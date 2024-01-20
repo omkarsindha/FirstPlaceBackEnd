@@ -19,7 +19,7 @@ public class User {
     String lastName;
     String bio;
     String gender;
-    int age;
+    Integer age;
     String location;
     String ethnicity;
     String religion;

@@ -25,6 +25,13 @@ public class RestController {
         return da.findUserById(id);
     }
 
+
+    //checks user from database
+    @PostMapping(path = "/login",consumes = "application/json")
+    public Boolean loginUser(@RequestBody User user) {
+        return da.findUserForLogin(user);
+    }
+
     //posts user to database
     @PostMapping(consumes = "application/json")
     public Boolean registerUser(@RequestBody User user) {
@@ -32,16 +39,16 @@ public class RestController {
     }
 
 
+
     // this is PUT - Replace an individual entry in the collection
     @PutMapping(path = "/{id}", consumes = "application/json")
-    public String putStudent(@PathVariable Long id, @RequestBody User user) {
+    public String editUser(@PathVariable Long id, @RequestBody User user) {
         return da.editUser(id, user);
     }
 
-
     // this is DELETE - delete account
     @DeleteMapping("/{id}")
-    public String deleteUSer(@PathVariable Long id) {
+    public String deleteUser(@PathVariable Long id) {
         da.deleteUserAccount(id);
         return "Account Deleted Successfully";
     }
