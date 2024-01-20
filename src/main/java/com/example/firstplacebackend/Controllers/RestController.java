@@ -21,8 +21,8 @@ public class RestController {
 
     // this is GET - retrieve an individual entry from the collection
     @GetMapping("/{id}")
-    public User getIndividualUser(@PathVariable Long id) {
-        return da.findUserById(id).get(0);
+    public User getIndividualUser(@PathVariable int id) {
+        return da.findUserById(id);
     }
 
     //posts user to database

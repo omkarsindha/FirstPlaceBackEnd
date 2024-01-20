@@ -6,32 +6,24 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import com.example.firstplacebackend.Bean.Prompt;
 import com.example.firstplacebackend.Bean.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import com.example.firstplacebackend.Utility.HelperMethods;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.imageio.ImageIO;
-
-import static com.example.firstplacebackend.Utility.HelperMethods.convertImageToByteArray;
-
 @Repository
 public class DatabaseAccess {
     @Autowired
     protected NamedParameterJdbcTemplate jdbc;
 
     public Boolean findUserForLogin(User user) {
-        user.setName("User1");
+        user.setUsername("User1");
         user.setPassword("Pass1");
         MapSqlParameterSource np = new MapSqlParameterSource();
         String query = "SELECT * FROM users where name = :name and password = :password";
-        np.addValue("name", user.getName());
+        np.addValue("name", user.getUsername());
         np.addValue("password", user.getPassword());
         int count = jdbc.query(query, np,new BeanPropertyRowMapper<User>(User.class)).size();
         return count>0;
@@ -39,8 +31,8 @@ public class DatabaseAccess {
 
     public Boolean registerUser(User user) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
-        String query = "INSERT INTO users(name,password) VALUES(:name,:password)";
-        namedParameters.addValue("name", user.getName());
+        String query = "INSERT INTO users(username,password) VALUES(:username,:password)";
+        namedParameters.addValue("username", user.getUsername());
         namedParameters.addValue("password", user.getPassword());
         int count = jdbc.update(query, namedParameters);
         return count > 0;
@@ -49,24 +41,36 @@ public class DatabaseAccess {
     public List<User> getUserCollection() {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         String query = "SELECT * FROM users";
-        return jdbc.query(query, namedParameters, new BeanPropertyRowMapper<User>(User.class));
+        List<User> users = jdbc.query(query, namedParameters, new BeanPropertyRowMapper<User>(User.class));
+        for (User user:users){
+            String query2 = "SELECT * FROM prompts WHERE userId = :id";
+            namedParameters.addValue("id", user.getId());
+            List<Prompt> prompts = jdbc.query(query2, namedParameters, new BeanPropertyRowMapper<Prompt>(Prompt.class));
+            user.setPrompts(prompts);
+        }
+        return users;
     }
 
-    public List<User> findUserById(Long id) {
+    public User findUserById(int id) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         String query = "SELECT * FROM users WHERE id = :id";
-        namedParameters.addValue("id", id);
-        return jdbc.query(query, namedParameters, new BeanPropertyRowMapper<User>(User.class));
+        namedParameters.addValue("id",id);
+        User user = jdbc.query(query, namedParameters, new BeanPropertyRowMapper<User>(User.class)).get(0);
+        String query2 = "SELECT * FROM prompts WHERE userId = :userId";
+        namedParameters.addValue("userId", user.getId());
+        List<Prompt> prompts = jdbc.query(query2, namedParameters, new BeanPropertyRowMapper<Prompt>(Prompt.class));
+        user.setPrompts(prompts);
+        return user;
     }
 
     public String editUser(Long id, User user) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
-        String query = "UPDATE users SET name=:name, password=:password, pfp=:pfp where id=:id";
+        String query = "UPDATE users SET username=:name, password=:password, pfp=:pfp,  where id=:id";
         namedParameters.addValue("id", id);
-        namedParameters.addValue("name", user.getName());
+        namedParameters.addValue("username", user.getUsername());
         namedParameters.addValue("password", user.getPassword());
         namedParameters.addValue("pfp", user.getPfp());
-        namedParameters.addValue("prompts", user.getPrompts());
+
         jdbc.update(query, namedParameters);
         return "user info updated";
     }

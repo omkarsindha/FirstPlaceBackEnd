@@ -5,13 +5,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class User {
-    String name;
+    int id;
+    String username;
     String password;
     byte[] pfp;
-    ArrayList<Prompt> prompts = new ArrayList<Prompt>();
+    String firstName;
+    String lastName;
+    String bio;
+    String gender;
+    int age;
+    String location;
+    String ethnicity;
+    String religion;
+    String interests;
+    String hobbies;
+    String drinking;
+    List<Prompt> prompts = new ArrayList<Prompt>();
 }
