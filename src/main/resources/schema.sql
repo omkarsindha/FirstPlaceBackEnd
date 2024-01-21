@@ -2,10 +2,10 @@ CREATE TABLE IF NOT EXISTS users (
                                      id LONG PRIMARY KEY AUTO_INCREMENT,
                                      username VARCHAR(255),
                                      password VARCHAR(255),
-                                     pfp LONGBLOB,
+                                     email VARCHAR(50),
                                      firstName VARCHAR(50),
                                      lastName VARCHAR(50),
-                                     bio VARCHAR(50),
+                                     bio VARCHAR(255),
                                      gender VARCHAR(50),
                                      age INT,
                                      location VARCHAR(50),
@@ -24,12 +24,10 @@ CREATE TABLE IF NOT EXISTS prompts (
                                      caption varchar(255)
 );
 
-
-
-INSERT INTO users (username,password,pfp,firstname,lastname,bio,gender,age,location,ethnicity,religion,interests,hobbies,drinking)
-            VALUES ('User1','Pass1','null','fn','ln','bio','gender',19,'Mississauga','Asian','Hindu','int','hob','drinking');
-INSERT INTO users (username,password,pfp,firstname,lastname,bio,gender,age,location,ethnicity,religion,interests,hobbies,drinking)
-            VALUES ('User2','Pass2','null2','fn2','ln2','bio2','gender2',18,'Mississauga','Asian2','Hindu2','int2','hob2','drinking2');
+INSERT INTO users (username,password,email,firstname,lastname,bio,gender,age,location,ethnicity,religion,interests,hobbies,drinking)
+            VALUES ('User1','Pass1','omkar@gmail','fn','ln','bio','gender',19,'Mississauga','Asian','Hindu','int','hob','drinking');
+INSERT INTO users (username,password,email,firstname,lastname,bio,gender,age,location,ethnicity,religion,interests,hobbies,drinking)
+            VALUES ('User2','Pass2','omkar@gmail2','fn2','ln2','bio2','gender2',18,'Mississauga','Asian2','Hindu2','int2','hob2','drinking2');
 INSERT INTO prompts (userId,image,caption) VALUES ('1','null1','Hi this is prompt1');
 INSERT INTO prompts (userId,image,caption) VALUES ('1','null2','Hi this is prompt2');
 

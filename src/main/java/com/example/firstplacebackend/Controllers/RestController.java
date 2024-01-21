@@ -25,10 +25,9 @@ public class RestController {
         return da.findUserById(id);
     }
 
-
     //checks user from database
     @PostMapping(path = "/login",consumes = "application/json")
-    public Boolean loginUser(@RequestBody User user) {
+    public User loginUser(@RequestBody User user) {
         return da.findUserForLogin(user);
     }
 
@@ -37,8 +36,6 @@ public class RestController {
     public Boolean registerUser(@RequestBody User user) {
         return da.registerUser(user);
     }
-
-
 
     // this is PUT - Replace an individual entry in the collection
     @PutMapping(path = "/{id}", consumes = "application/json")
@@ -52,7 +49,5 @@ public class RestController {
         da.deleteUserAccount(id);
         return "Account Deleted Successfully";
     }
-
-
 
 }

@@ -3,7 +3,6 @@ package com.example.firstplacebackend.Bean;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class User {
     int id;
     String username;
     String password;
-    byte[] pfp;
+    String email;
     String firstName;
     String lastName;
     String bio;
